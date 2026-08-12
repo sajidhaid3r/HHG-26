@@ -1,0 +1,71 @@
+# Hacker House Goa 2026 — Frame & ID Generator
+
+A single-file, no-build web app built against the official shortlisting brief. It implements
+**both** formats so you can pick whichever fits your post:
+
+- **ID Card** — photo + name/handle/org/city/role + a generated "Builder Title", laid out like
+  an event badge (terminal/dossier style, 4 selectable colorways).
+- **PFP Frame** — the same photo cropped into a circular, ring-branded frame ready to use as an
+  X profile picture.
+
+Everything runs client-side. No backend, no login, no upload wait.
+
+## How it meets the brief
+
+| Requirement | How it's handled |
+|---|---|
+| Upload JPG/PNG/HEIC | Native file input + drag-drop. HEIC/HEIF (iPhone) is converted in-browser on demand via `heic2any`, loaded only when needed. |
+| Handles real photos (any crop/aspect) | Cover-fit + drag-to-reposition + zoom slider + **pinch-to-zoom** on touch, so off-center or oddly-cropped photos can always be framed correctly. |
+| Near-instant result | Everything is drawn on a `<canvas>` in the browser — no server round trip, no loading screen. |
+| On-brand | Custom "identity system" visual language (not a logo pasted on a generic badge): generated ID code, decorative scan/QR block, circular stamp seal, coordinates, dashed ticket lines, 4 curated colorways. |
+| Downloadable real file | "Download PNG" renders the card at 2× resolution (2160×2160) via an offscreen canvas and saves a real `.png`. |
+| Working share flow | "Share to X" uses the **Web Share API** with the exported image file — on supporting phones (Android Chrome, iOS Safari) this opens the native share sheet with X as a target and the image **already attached**, plus a pre-filled caption with `#FrameInGoa`. Where the browser doesn't support sharing files (most desktops today), it falls back to downloading the PNG and opening a pre-filled X compose window, with an on-screen note asking the user to attach the file. |
+| Mobile-friendly | Responsive single-column layout under ~920px, touch-first drag/pinch controls, all tap targets sized for thumbs. |
+| No login/signup wall | None — the tool works fully in one pass. |
+
+### About the "OG image" fallback path
+This is a static site with no backend, so there's nowhere to host a per-user dynamic Open Graph
+image for a shareable link. The Web Share API path (direct image attach) is the practical
+equivalent for a client-only build and is what most mobile users will hit. If you want true
+link-preview sharing later, the natural upgrade is a small serverless function (e.g. a Vercel
+Edge Function) that accepts the canvas data and returns a page with a matching `og:image` —
+not required for this submission, but flagged here as the next step.
+
+## Run it locally
+Just open `index.html` in a browser.
+
+## Deploy — pick one
+
+### Vercel (recommended — fastest)
+```bash
+npm i -g vercel
+vercel
+```
+No build command needed, it's static. You'll get a link like `https://hhgoa-frame.vercel.app`.
+
+### Netlify
+Drag the project folder onto [app.netlify.com/drop](https://app.netlify.com/drop), or:
+```bash
+npm i -g netlify-cli
+netlify deploy --prod
+```
+
+### GitHub Pages
+```bash
+git init && git add . && git commit -m "HH Goa 2026 frame generator"
+git branch -M main
+git remote add origin https://github.com/<you>/hhgoa-frame.git
+git push -u origin main
+```
+Then **Settings → Pages → Deploy from branch → main / (root)**.
+
+## Submission checklist (per the brief)
+
+1. Deploy and open your live link.
+2. Upload a photo, fill in your details, pick a colorway, and pick ID Card or PFP Frame.
+3. Tap **Share to X** (attaches the image directly on supported phones) or **Download PNG**
+   and attach it manually, then post — the caption already includes `#FrameInGoa`.
+4. Confirm the post is live and actually contains `#FrameInGoa` (submissions without it are
+   invalid per the brief).
+5. Submit via the form: https://forms.gle/jM5hTaGvsrfEfixPA — one submission per team.
+6. Deadline: **11:59 PM, 13 August 2026**.

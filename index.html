@@ -1,0 +1,1596 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hacker House Goa 2026 — Frame &amp; ID Generator</title>
+    <meta name="description"
+        content="Upload a photo, get a branded Hacker House Goa 2026 frame or ID card in seconds. Share with #FrameInGoa" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --app-bg: #060B08;
+            --app-bg2: #081208;
+            --app-grid: rgba(90, 255, 170, 0.05);
+            --app-border: rgba(120, 255, 180, 0.16);
+            --app-border-strong: rgba(120, 255, 180, 0.30);
+            --app-text: #EAF7EF;
+            --app-dim: #7FA995;
+            --app-dim2: #5A7A6C;
+            --app-gold: #F2C94C;
+            --app-green: #3CFFA3;
+            --app-danger: #FF8A6E;
+            --radius: 6px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background:
+                linear-gradient(var(--app-grid) 1px, transparent 1px) 0 0/38px 38px,
+                linear-gradient(90deg, var(--app-grid) 1px, transparent 1px) 0 0/38px 38px,
+                radial-gradient(900px 500px at 90% -10%, rgba(60, 255, 163, 0.08), transparent 60%),
+                var(--app-bg);
+            color: var(--app-text);
+            font-family: 'Space Mono', monospace;
+            min-height: 100vh;
+        }
+
+        a {
+            color: inherit;
+        }
+
+        .wrap {
+            max-width: 1220px;
+            margin: 0 auto;
+            padding: 40px 22px 90px;
+        }
+
+        header.top {
+            margin-bottom: 32px;
+        }
+
+        .eyebrow {
+            font-size: 12px;
+            letter-spacing: 0.16em;
+            color: var(--app-gold);
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin-bottom: 14px;
+        }
+
+        .eyebrow::before {
+            content: "";
+            width: 7px;
+            height: 7px;
+            background: var(--app-green);
+            box-shadow: 0 0 8px var(--app-green);
+        }
+
+        h1 {
+            font-family: 'Sora', sans-serif;
+            font-weight: 800;
+            font-size: clamp(24px, 3.4vw, 38px);
+            line-height: 1.1;
+            margin: 0 0 10px;
+            letter-spacing: -0.01em;
+        }
+
+        h1 span {
+            color: var(--app-green);
+        }
+
+        .lede {
+            max-width: 600px;
+            color: var(--app-dim);
+            font-size: 13px;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        @media (max-width:920px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .left-col {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .panel {
+            position: relative;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.005));
+            border: 1px solid var(--app-border);
+            border-radius: var(--radius);
+            padding: 22px 24px 26px;
+        }
+
+        .panel::after {
+            content: "";
+            position: absolute;
+            right: 10px;
+            bottom: 10px;
+            width: 14px;
+            height: 14px;
+            border-right: 1.5px solid var(--app-border-strong);
+            border-bottom: 1.5px solid var(--app-border-strong);
+        }
+
+        .panel-head {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .panel-head .num {
+            font-size: 21px;
+            font-weight: 700;
+            color: var(--app-gold);
+        }
+
+        .panel-head .label {
+            font-size: 12.5px;
+            font-weight: 700;
+            letter-spacing: 0.16em;
+        }
+
+        .hr {
+            height: 1px;
+            background: var(--app-border);
+            margin-bottom: 18px;
+        }
+
+        #dropzone {
+            border: 1.5px dashed var(--app-border-strong);
+            border-radius: 4px;
+            padding: 24px 14px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color .15s ease, background .15s ease;
+        }
+
+        #dropzone:hover,
+        #dropzone.drag {
+            border-color: var(--app-green);
+            background: rgba(60, 255, 163, 0.04);
+        }
+
+        #dropzone svg {
+            opacity: 0.7;
+            margin-bottom: 8px;
+        }
+
+        #dropzone .dz-title {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+        }
+
+        #dropzone .dz-sub {
+            font-size: 10.5px;
+            color: var(--app-dim2);
+            margin-top: 5px;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .photo-actions {
+            display: none;
+            gap: 10px;
+        }
+
+        .photo-actions.show {
+            display: flex;
+        }
+
+        .btn {
+            font-family: 'Space Mono', monospace;
+            font-size: 11.5px;
+            font-weight: 700;
+            letter-spacing: 0.07em;
+            padding: 11px 15px;
+            border-radius: 4px;
+            border: 1px solid transparent;
+            cursor: pointer;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-fill {
+            background: var(--app-gold);
+            color: #241A03;
+        }
+
+        .btn-fill:hover {
+            filter: brightness(1.07);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border-color: var(--app-border-strong);
+            color: var(--app-text);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--app-green);
+            color: var(--app-green);
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+
+        .status-line {
+            font-size: 11px;
+            color: var(--app-gold);
+            margin-top: 12px;
+            min-height: 14px;
+            line-height: 1.5;
+        }
+
+        .status-line.err {
+            color: var(--app-danger);
+        }
+
+        .zoom-field {
+            margin-top: 16px;
+        }
+
+        .zoom-field label {
+            display: block;
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            color: var(--app-dim);
+            margin-bottom: 8px;
+        }
+
+        .zoom-field input[type=range] {
+            width: 100%;
+            accent-color: var(--app-green);
+        }
+
+        .zoom-field .hint {
+            font-size: 10.5px;
+            color: var(--app-dim2);
+            margin-top: 6px;
+            line-height: 1.5;
+        }
+
+        .field-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .field {
+            margin-bottom: 15px;
+        }
+
+        .field label {
+            display: block;
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            color: var(--app-dim);
+            margin-bottom: 7px;
+        }
+
+        .field input[type=text] {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid var(--app-border);
+            border-radius: 4px;
+            padding: 10px 11px;
+            color: var(--app-text);
+            font-family: 'Space Mono', monospace;
+            font-size: 12.5px;
+            text-transform: uppercase;
+            outline: none;
+        }
+
+        .field input[type=text]:focus {
+            border-color: var(--app-green);
+        }
+
+        .field input[type=text]::placeholder {
+            color: #3E5548;
+            text-transform: none;
+        }
+
+        .title-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .title-row input {
+            flex: 1;
+        }
+
+        .dice-btn {
+            flex-shrink: 0;
+            width: 40px;
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid var(--app-border);
+            border-radius: 4px;
+            color: var(--app-text);
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .dice-btn:hover {
+            border-color: var(--app-green);
+            color: var(--app-green);
+        }
+
+        .theme-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 11px;
+        }
+
+        .theme-card {
+            text-align: left;
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--app-border);
+            border-radius: 4px;
+            padding: 13px 13px 14px;
+            cursor: pointer;
+            color: var(--app-text);
+            font-family: 'Space Mono', monospace;
+        }
+
+        .theme-card:hover {
+            border-color: var(--app-border-strong);
+        }
+
+        .theme-card.active {
+            border-color: var(--app-gold);
+            background: rgba(242, 201, 76, 0.06);
+        }
+
+        .theme-card .row1 {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 9px;
+        }
+
+        .swatches {
+            display: flex;
+            gap: 5px;
+        }
+
+        .swatches span {
+            width: 13px;
+            height: 13px;
+            display: block;
+            border-radius: 2px;
+        }
+
+        .state {
+            font-size: 9.5px;
+            letter-spacing: 0.08em;
+            color: var(--app-dim2);
+        }
+
+        .theme-card.active .state {
+            color: var(--app-gold);
+            font-weight: 700;
+        }
+
+        .theme-name {
+            font-size: 12.5px;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            margin-bottom: 4px;
+        }
+
+        .theme-desc {
+            font-size: 10px;
+            color: var(--app-dim);
+            line-height: 1.45;
+        }
+
+        .right-col {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            align-items: stretch;
+        }
+
+        .preview-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            font-size: 11px;
+            letter-spacing: 0.14em;
+        }
+
+        .preview-head .live {
+            color: var(--app-gold);
+            font-weight: 700;
+        }
+
+        .preview-head .dim {
+            color: var(--app-dim2);
+        }
+
+        .format-tabs {
+            display: flex;
+            gap: 8px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid var(--app-border);
+            background: transparent;
+            color: var(--app-dim);
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .tab-btn.active {
+            border-color: var(--app-green);
+            color: var(--app-green);
+            background: rgba(60, 255, 163, 0.06);
+        }
+
+        .canvas-shell {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px -22px rgba(0, 0, 0, 0.7), 0 0 0 1px var(--app-border);
+            max-width: 100%;
+            line-height: 0;
+            align-self: center;
+        }
+
+        #cardCanvas {
+            display: block;
+            width: min(500px, 92vw);
+            height: auto;
+            touch-action: none;
+            cursor: grab;
+            background: #000;
+        }
+
+        #cardCanvas.dragging {
+            cursor: grabbing;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-row .btn {
+            flex: 1;
+        }
+
+        .note {
+            font-size: 10.5px;
+            color: var(--app-dim2);
+            line-height: 1.6;
+            text-align: center;
+            margin: 0;
+        }
+
+        .share-status {
+            font-size: 11px;
+            color: var(--app-green);
+            text-align: center;
+            margin: 0;
+            min-height: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+
+        <header class="top">
+            <div class="eyebrow">2:47PM STUDIO // IDENTITY SYSTEM</div>
+            <h1>Build your <span>Hacker House Goa 2026</span> frame</h1>
+            <p class="lede">Upload a photo, fill in a couple of details, and get a ready-to-share graphic in seconds —
+                no login, no waiting.</p>
+        </header>
+
+        <div class="grid">
+            <!-- LEFT: CONTROLS -->
+            <div class="left-col">
+
+                <div class="panel">
+                    <div class="panel-head"><span class="num">01</span><span class="label">PHOTO</span></div>
+                    <div class="hr"></div>
+
+                    <div id="dropzone">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 16V4M12 4L7 9M12 4L17 9" stroke="#3CFFA3" stroke-width="1.6"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M4 16V18C4 19.1 4.9 20 6 20H18C19.1 20 20 19.1 20 18V16" stroke="#3CFFA3"
+                                stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <div class="dz-title">DROP PHOTO OR CLICK TO BROWSE</div>
+                        <div class="dz-sub">JPG, PNG, or iPhone HEIC — any crop or angle</div>
+                        <input type="file" id="fileInput" accept="image/*,.heic,.heif" />
+                    </div>
+
+                    <div class="photo-actions" id="photoActions">
+                        <button class="btn btn-fill" id="replaceBtn" type="button">↑ Replace Photo</button>
+                        <button class="btn btn-outline" id="clearBtn" type="button">↻ Clear</button>
+                    </div>
+
+                    <p class="status-line" id="uploadStatus"></p>
+
+                    <div class="zoom-field">
+                        <label>ZOOM / SCALE</label>
+                        <input type="range" id="zoomRange" min="1" max="3" step="0.01" value="1.15" disabled />
+                        <p class="hint">Drag the photo in the preview to reposition — pinch to zoom on touch screens.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-head"><span class="num">02</span><span class="label">IDENTITY</span></div>
+                    <div class="hr"></div>
+
+                    <div class="field-row">
+                        <div class="field">
+                            <label>NAME</label>
+                            <input type="text" id="nameInput" maxlength="26" placeholder="Your Name" />
+                        </div>
+                        <div class="field">
+                            <label>HANDLE</label>
+                            <input type="text" id="handleInput" maxlength="20" placeholder="@handle" />
+                        </div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field">
+                            <label>COLLEGE / ORG</label>
+                            <input type="text" id="orgInput" maxlength="28" placeholder="Org / College" />
+                        </div>
+                        <div class="field">
+                            <label>CITY</label>
+                            <input type="text" id="cityInput" maxlength="18" placeholder="City" />
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label>STACK / ROLE</label>
+                        <input type="text" id="roleInput" maxlength="24" placeholder="e.g. Full-Stack / AI Engineer" />
+                    </div>
+                    <div class="field">
+                        <label>BUILDER TITLE (GENERATED)</label>
+                        <div class="title-row">
+                            <input type="text" id="titleInput" maxlength="30" />
+                            <button class="dice-btn" id="rerollBtn" type="button" title="Reroll title">🎲</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-head"><span class="num">03</span><span class="label">FRAME</span></div>
+                    <div class="hr"></div>
+                    <div class="theme-grid" id="themeGrid"></div>
+                </div>
+
+            </div>
+
+            <!-- RIGHT: PREVIEW -->
+            <div class="right-col">
+                <div class="preview-head">
+                    <span class="live">LIVE PREVIEW</span>
+                    <span class="dim">1080 × 1080</span>
+                </div>
+
+                <div class="format-tabs">
+                    <button class="tab-btn active" id="tabCard" type="button">ID Card</button>
+                    <button class="tab-btn" id="tabPfp" type="button">PFP Frame</button>
+                </div>
+
+                <div class="canvas-shell">
+                    <canvas id="cardCanvas" width="1080" height="1080"></canvas>
+                </div>
+
+                <button class="btn btn-fill btn-block" id="downloadBtn" disabled>⬇ Download PNG</button>
+                <div class="btn-row">
+                    <button class="btn btn-outline" id="shareBtn" disabled>⤴ Share to X</button>
+                    <button class="btn btn-outline" id="copyBtn">⧉ Copy Caption</button>
+                </div>
+                <p class="share-status" id="shareStatus"></p>
+                <p class="note">On phones, Share to X attaches the image directly. On desktop, it downloads the PNG and
+                    opens X — attach it manually to the pre-filled post.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        (function () {
+            "use strict";
+
+            // =========================================================
+            // Design-space constants (everything is drawn into a 1080x1080 square)
+            // =========================================================
+            var CARD = 1080;
+            var PAD = 46;
+
+            // ---- ID CARD layout ----
+            var TITLE_BASELINE = PAD + 30;
+            var SUB_BASELINE = TITLE_BASELINE + 24;
+            var DIVIDER_Y = SUB_BASELINE + 16;
+            var CONTENT_Y = DIVIDER_Y + 24;
+
+            var PHOTO = { x: PAD, y: CONTENT_Y, w: 560, h: 560, r: 6, shape: 'round' };
+
+            var GAP = 26;
+            var RIGHT_X = PHOTO.x + PHOTO.w + GAP;
+            var RIGHT_W = CARD - PAD - RIGHT_X;
+
+            var QR_SIZE = 176;
+            var QR_X = RIGHT_X + (RIGHT_W - QR_SIZE) / 2;
+            var QR_Y = CONTENT_Y;
+            var SCAN_LABEL_Y = QR_Y + QR_SIZE + 24;
+
+            var FIELDS_START_Y = SCAN_LABEL_Y + 34;
+            var FIELD_ROW_H = 60;
+
+            var STATUS_Y = PHOTO.y + PHOTO.h + 18;
+            var STATUS_H = 40;
+
+            var NAME_BASELINE = STATUS_Y + STATUS_H + 58;
+            var HANDLE_ROW_Y = NAME_BASELINE + 40;
+
+            var STAMP_CX = CARD - PAD - 92;
+            var STAMP_CY = HANDLE_ROW_Y - 12;
+            var STAMP_R = 68;
+
+            var FOOTER_BASELINE = CARD - PAD - 30;
+            var DASH_Y = CARD - PAD - 8;
+
+            // ---- PFP FRAME layout ----
+            var PFP_CX = 540, PFP_CY = 540, PFP_R = 350;
+            var PFP_RING1_R = PFP_R + 8;
+            var PFP_RING2_R = PFP_R + 20;
+            var PFP_ARC_R = PFP_R + 52;
+            var PFP_PHOTO = { x: PFP_CX - PFP_R, y: PFP_CY - PFP_R, w: PFP_R * 2, h: PFP_R * 2, shape: 'circle' };
+
+            function getPhotoRect() {
+                return state.mode === 'pfp' ? PFP_PHOTO : PHOTO;
+            }
+
+            // =========================================================
+            // Themes — near-black or near-white bases with saturated accents,
+            // chosen so the smallest label text still reads clearly (WCAG-AA).
+            // =========================================================
+            var THEMES = [
+                {
+                    key: "TERMINAL", slug: "TERMINAL", name: "Terminal", desc: "green-on-black, scanlines, root access",
+                    swatches: ["#050B08", "#123324", "#3CFFA3"],
+                    bg: "#050B08", bg2: "#081F13", border: "rgba(60,255,163,0.35)", grid: "rgba(60,255,163,0.05)",
+                    text: "#EAFBF1", dim: "rgba(234,251,241,0.55)", accent: "#3CFFA3", accent2: "#29D9C8",
+                    statusBg: "#123324", statusText: "#C7FFE6", badgeBg: "#3CFFA3", badgeText: "#052013", corner: "#3CFFA3"
+                },
+                {
+                    key: "SUNSET_RUN", slug: "SUNSETRUN", name: "Sunset Run", desc: "arambol dusk, coral gradient bands",
+                    swatches: ["#150A10", "#FF7A59", "#FFC24B"],
+                    bg: "#150A10", bg2: "#241019", border: "rgba(255,140,90,0.35)", grid: "rgba(255,140,90,0.05)",
+                    text: "#FDECE3", dim: "rgba(253,236,227,0.58)", accent: "#FF7A59", accent2: "#FFC24B",
+                    statusBg: "#3A160E", statusText: "#FFDCC4", badgeBg: "#FF7A59", badgeText: "#210A05", corner: "#FFC24B"
+                },
+                {
+                    key: "PALM_NOIR", slug: "PALMNOIR", name: "Palm Noir", desc: "deep tide teal with gold hairlines",
+                    swatches: ["#071722", "#155263", "#E8C468"],
+                    bg: "#071722", bg2: "#0C2530", border: "rgba(232,196,104,0.32)", grid: "rgba(47,184,176,0.06)",
+                    text: "#EAF4F3", dim: "rgba(234,244,243,0.55)", accent: "#3ECDC4", accent2: "#E8C468",
+                    statusBg: "#0F2E34", statusText: "#D2F1EC", badgeBg: "#E8C468", badgeText: "#191305", corner: "#E8C468"
+                },
+                {
+                    key: "SUSEGAD", slug: "SUSEGAD", name: "Susegad", desc: "paper white, ink black, stamp red",
+                    swatches: ["#F3EEE1", "#17140F", "#B0241B"],
+                    bg: "#F3EEE1", bg2: "#EBE3CF", border: "rgba(23,20,15,0.30)", grid: "rgba(23,20,15,0.05)",
+                    text: "#17140F", dim: "rgba(23,20,15,0.62)", accent: "#B0241B", accent2: "#17140F",
+                    statusBg: "#E4D8BC", statusText: "#17140F", badgeBg: "#B0241B", badgeText: "#FBF3E7", corner: "#17140F"
+                }
+            ];
+
+            var BUILDER_ADJ = ["Midnight", "Feral", "Chaotic-Good", "Certified", "Sleep-Deprived", "Undefeated",
+                "Recursive", "Caffeinated", "Overclocked", "Stealth", "Full-Send", "Undocumented", "Battle-Tested", "Legendary"];
+            var BUILDER_NOUN = ["Shipper", "Debugger", "Prompt Whisperer", "Yak Shaver", "Vibe Coder",
+                "Merge-Conflict Survivor", "Terminal Wizard", "Hackathon Menace", "Commit Historian", "API Whisperer",
+                "Demo-Day Gladiator", "Bug Whisperer", "Stack Overflow Veteran", "Root Access Holder"];
+
+            // =========================================================
+            // State
+            // =========================================================
+            var state = {
+                img: null, zoom: 1.15, offsetX: 0, offsetY: 0,
+                name: "", handle: "", org: "", city: "", role: "",
+                builderTitle: "", rerollCount: 0,
+                themeIndex: 0, mode: 'card',
+                idCode: makeIdCode()
+            };
+
+            function makeIdCode() {
+                var letters = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+                var l1 = letters[Math.floor(Math.random() * letters.length)];
+                var l2 = letters[Math.floor(Math.random() * letters.length)];
+                var num = Math.floor(1000 + Math.random() * 9000);
+                return "HHG26-" + l1 + l2 + "-" + num;
+            }
+
+            function hashStr(str) {
+                var h = 0;
+                for (var i = 0; i < str.length; i++) { h = (h * 31 + str.charCodeAt(i)) >>> 0; }
+                return h;
+            }
+            function seededRandom(seed) {
+                var s = seed % 2147483647;
+                if (s <= 0) s += 2147483646;
+                return function () { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; };
+            }
+            function generateBuilderTitle() {
+                var seed = hashStr((state.name || 'anon') + '|' + (state.handle || '') + '|' + state.rerollCount);
+                var rand = seededRandom(seed);
+                var adj = BUILDER_ADJ[Math.floor(rand() * BUILDER_ADJ.length)];
+                var noun = BUILDER_NOUN[Math.floor(rand() * BUILDER_NOUN.length)];
+                return adj + " " + noun;
+            }
+            state.builderTitle = generateBuilderTitle();
+
+            var canvas = document.getElementById('cardCanvas');
+            var ctx = canvas.getContext('2d');
+
+            // =========================================================
+            // Small drawing helpers
+            // =========================================================
+            function roundRectPath(c, x, y, w, h, r) {
+                if (typeof r === 'number') r = { tl: r, tr: r, br: r, bl: r };
+                c.beginPath();
+                c.moveTo(x + r.tl, y);
+                c.lineTo(x + w - r.tr, y);
+                c.arcTo(x + w, y, x + w, y + r.tr, r.tr);
+                c.lineTo(x + w, y + h - r.br);
+                c.arcTo(x + w, y + h, x + w - r.br, y + h, r.br);
+                c.lineTo(x + r.bl, y + h);
+                c.arcTo(x, y + h, x, y + h - r.bl, r.bl);
+                c.lineTo(x, y + r.tl);
+                c.arcTo(x, y, x + r.tl, y, r.tl);
+                c.closePath();
+            }
+
+            function fitFontSize(c, text, maxWidth, startSize, minSize, fontSpec) {
+                var size = startSize;
+                while (size > minSize) {
+                    c.font = fontSpec.replace('SIZE', size);
+                    if (c.measureText(text).width <= maxWidth) break;
+                    size -= 1;
+                }
+                c.font = fontSpec.replace('SIZE', size);
+                return size;
+            }
+
+            function drawCorner(c, x, y, size, color, mode) {
+                c.save();
+                c.strokeStyle = color;
+                c.lineWidth = 2;
+                c.beginPath();
+                if (mode === 'tl') { c.moveTo(x, y + size); c.lineTo(x, y); c.lineTo(x + size, y); }
+                else { c.moveTo(x - size, y); c.lineTo(x, y); c.lineTo(x, y - size); }
+                c.stroke();
+                c.restore();
+            }
+
+            function drawQR(c, x, y, size, seedStr, dotColor, bgColor) {
+                var modules = 21;
+                var cell = size / modules;
+                c.save();
+                roundRectPath(c, x, y, size, size, 4);
+                c.fillStyle = bgColor;
+                c.fill();
+
+                var rand = seededRandom(hashStr(seedStr));
+                var finderZones = [{ r0: 0, c0: 0 }, { r0: 0, c0: modules - 7 }, { r0: modules - 7, c0: 0 }];
+                function inFinder(r, cc) {
+                    for (var i = 0; i < finderZones.length; i++) {
+                        var z = finderZones[i];
+                        if (r >= z.r0 && r < z.r0 + 7 && cc >= z.c0 && cc < z.c0 + 7) return true;
+                    }
+                    return false;
+                }
+                function drawFinder(r0, c0) {
+                    c.fillStyle = dotColor;
+                    c.fillRect(x + c0 * cell, y + r0 * cell, cell * 7, cell * 7);
+                    c.fillStyle = bgColor;
+                    c.fillRect(x + (c0 + 1) * cell, y + (r0 + 1) * cell, cell * 5, cell * 5);
+                    c.fillStyle = dotColor;
+                    c.fillRect(x + (c0 + 2) * cell, y + (r0 + 2) * cell, cell * 3, cell * 3);
+                }
+
+                c.fillStyle = dotColor;
+                for (var r = 0; r < modules; r++) {
+                    for (var cc = 0; cc < modules; cc++) {
+                        if (inFinder(r, cc)) continue;
+                        if (rand() > 0.56) {
+                            c.fillRect(x + cc * cell + 0.6, y + r * cell + 0.6, cell - 1.2, cell - 1.2);
+                        }
+                    }
+                }
+                finderZones.forEach(function (z) { drawFinder(z.r0, z.c0); });
+                c.restore();
+            }
+
+            function drawCircularText(c, text, cx, cy, radius, color, font) {
+                c.save();
+                c.translate(cx, cy);
+                c.font = font;
+                c.fillStyle = color;
+                c.textBaseline = 'middle';
+                c.textAlign = 'center';
+                var n = text.length;
+                var anglePerChar = (Math.PI * 2) / n;
+                c.rotate(-Math.PI / 2);
+                for (var i = 0; i < n; i++) {
+                    c.save();
+                    c.rotate(i * anglePerChar);
+                    c.translate(0, -radius);
+                    c.rotate(Math.PI / 2);
+                    c.fillText(text[i], 0, 0);
+                    c.restore();
+                }
+                c.restore();
+            }
+
+            // Places text along an arc, auto-spacing characters using their
+            // actual glyph width so short and long strings both look correct.
+            function drawArcTextAuto(c, text, cx, cy, radius, color, font, centerAngleRad) {
+                c.save();
+                c.font = font;
+                var cw = c.measureText('0').width;
+                c.translate(cx, cy);
+                c.fillStyle = color;
+                c.textAlign = 'center';
+                c.textBaseline = 'middle';
+                var n = text.length;
+                var step = cw / radius;
+                var startAngle = centerAngleRad - step * (n - 1) / 2;
+                for (var i = 0; i < n; i++) {
+                    var angle = startAngle + i * step;
+                    c.save();
+                    c.rotate(angle);
+                    c.translate(0, -radius);
+                    c.rotate(Math.PI / 2);
+                    c.fillText(text[i], 0, 0);
+                    c.restore();
+                }
+                c.restore();
+            }
+
+            function drawPhotoInto(c, rect, th) {
+                c.save();
+                if (rect.shape === 'circle') {
+                    c.beginPath();
+                    c.arc(rect.x + rect.w / 2, rect.y + rect.h / 2, rect.w / 2, 0, Math.PI * 2);
+                    c.clip();
+                } else {
+                    roundRectPath(c, rect.x, rect.y, rect.w, rect.h, rect.r);
+                    c.clip();
+                }
+                c.fillStyle = th.bg2;
+                c.fillRect(rect.x, rect.y, rect.w, rect.h);
+
+                if (state.img) {
+                    var img = state.img;
+                    var baseScale = Math.max(rect.w / img.width, rect.h / img.height);
+                    var s = baseScale * state.zoom;
+                    var dw = img.width * s, dh = img.height * s;
+                    var cx = rect.x + rect.w / 2 + state.offsetX;
+                    var cy = rect.y + rect.h / 2 + state.offsetY;
+                    c.drawImage(img, cx - dw / 2, cy - dh / 2, dw, dh);
+                } else {
+                    c.fillStyle = th.dim;
+                    c.font = "13px 'Space Mono', monospace";
+                    c.textAlign = 'center';
+                    c.textBaseline = 'middle';
+                    c.fillText("[ NO IMAGE LOADED ]", rect.x + rect.w / 2, rect.y + rect.h / 2);
+                }
+                c.restore();
+            }
+
+            function drawChip(c, text, x, y, color, textColor, font) {
+                c.font = font;
+                var padX = 14, h = 32;
+                var w = c.measureText(text).width + padX * 2;
+                roundRectPath(c, x, y, w, h, h / 2);
+                c.fillStyle = color;
+                c.fill();
+                c.fillStyle = textColor;
+                c.textAlign = 'left';
+                c.textBaseline = 'middle';
+                c.fillText(text, x + padX, y + h / 2 + 1);
+                return w;
+            }
+
+            // =========================================================
+            // ID CARD renderer
+            // =========================================================
+            function drawCard(c, th) {
+                c.textAlign = 'left';
+                c.textBaseline = 'alphabetic';
+                c.font = "800 30px 'Sora', sans-serif";
+                c.fillStyle = th.text;
+                var t1 = "HACKER HOUSE ";
+                c.fillText(t1, PAD, TITLE_BASELINE);
+                var t1w = c.measureText(t1).width;
+                c.fillStyle = th.accent;
+                c.fillText("GOA", PAD + t1w, TITLE_BASELINE);
+
+                c.font = "700 13px 'Space Mono', monospace";
+                c.fillStyle = th.dim;
+                c.textAlign = 'right';
+                c.fillText("EDITION 2026", CARD - PAD, TITLE_BASELINE - 8);
+
+                c.textAlign = 'left';
+                c.font = "13px 'Space Mono', monospace";
+                c.fillStyle = th.dim;
+                c.fillText("IDENTITY SYSTEM / V2.6", PAD, SUB_BASELINE);
+                c.textAlign = 'right';
+                c.fillText("15\u00B035'N 73\u00B045'E \u00B7 ANJUNA", CARD - PAD, SUB_BASELINE);
+
+                c.strokeStyle = th.border;
+                c.lineWidth = 1;
+                c.beginPath(); c.moveTo(PAD, DIVIDER_Y); c.lineTo(CARD - PAD, DIVIDER_Y); c.stroke();
+
+                // photo
+                drawPhotoInto(c, PHOTO, th);
+                c.strokeStyle = th.border;
+                c.lineWidth = 2;
+                roundRectPath(c, PHOTO.x, PHOTO.y, PHOTO.w, PHOTO.h, PHOTO.r);
+                c.stroke();
+
+                // chips over photo
+                var chipFont = "700 20px 'Space Mono', monospace";
+                drawChip(c, "HH \u00B7 GOA \u00B7 2026", PHOTO.x + 20, PHOTO.y + 20, "rgba(0,0,0,0.55)", th.accent, chipFont);
+                var badgeTxt = "APPLICANT";
+                c.font = chipFont;
+                var bw = c.measureText(badgeTxt).width + 28;
+                drawChip(c, badgeTxt, PHOTO.x + PHOTO.w - 20 - bw, PHOTO.y + 20, th.accent2, th.bg, chipFont);
+
+                // QR block
+                drawQR(c, QR_X, QR_Y, QR_SIZE, state.idCode, th.text, th.bg2);
+                c.strokeStyle = th.border;
+                c.lineWidth = 1.5;
+                roundRectPath(c, QR_X, QR_Y, QR_SIZE, QR_SIZE, 4);
+                c.stroke();
+                c.textAlign = 'center';
+                c.font = "700 10.5px 'Space Mono', monospace";
+                c.fillStyle = th.dim;
+                c.fillText("SCAN / VERIFY", QR_X + QR_SIZE / 2, SCAN_LABEL_Y);
+
+                // right column fields
+                var rows = [
+                    { label: "PARTICIPANT", value: state.idCode, color: th.accent },
+                    { label: "ROLE", value: state.role || "BUILDER", color: th.text },
+                    { label: "ORG", value: state.org || "INDEPENDENT", color: th.text },
+                    { label: "CITY", value: state.city || "GOA, IN", color: th.text }
+                ];
+                c.textAlign = 'left';
+                rows.forEach(function (row, i) {
+                    var ry = FIELDS_START_Y + i * FIELD_ROW_H;
+                    c.font = "700 10.5px 'Space Mono', monospace";
+                    c.fillStyle = th.dim;
+                    c.fillText(row.label, RIGHT_X, ry);
+                    fitFontSize(c, row.value, RIGHT_W - 4, 19, 12, "700 SIZEpx 'Space Mono', monospace");
+                    c.fillStyle = row.color;
+                    c.fillText(row.value, RIGHT_X, ry + 24);
+                });
+
+                // status bar
+                roundRectPath(c, PHOTO.x, STATUS_Y, PHOTO.w, STATUS_H, 4);
+                c.fillStyle = th.statusBg;
+                c.fill();
+                c.font = "700 12px 'Space Mono', monospace";
+                c.fillStyle = th.statusText;
+                c.textAlign = 'left';
+                c.fillText("SUBJECT / " + state.idCode, PHOTO.x + 16, STATUS_Y + STATUS_H / 2 + 4);
+                c.textAlign = 'right';
+                c.fillText("CAPTURE OK", PHOTO.x + PHOTO.w - 16, STATUS_Y + STATUS_H / 2 + 4);
+
+                // name
+                c.textAlign = 'left';
+                var displayName = (state.name || "YOUR NAME HERE").toUpperCase();
+                fitFontSize(c, displayName, CARD - PAD * 2 - 200, 42, 24, "800 SIZEpx 'Sora', sans-serif");
+                c.fillStyle = th.text;
+                c.fillText(displayName, PAD, NAME_BASELINE);
+
+                // handle + builder-title badge
+                c.font = "13px 'Space Mono', monospace";
+                c.fillStyle = th.dim;
+                var handleText = state.handle ? (state.handle.indexOf('@') === 0 ? state.handle : '@' + state.handle) : "@handle";
+                c.fillText(handleText, PAD, HANDLE_ROW_Y);
+                var handleW = c.measureText(handleText).width;
+
+                var titleTxt = (state.builderTitle || "BUILDER").toUpperCase();
+                c.font = "700 12px 'Space Mono', monospace";
+                var tw = c.measureText(titleTxt).width + 24;
+                var bx = PAD + handleW + 16, by = HANDLE_ROW_Y - 15;
+                roundRectPath(c, bx, by, tw, 22, 11);
+                c.fillStyle = th.badgeBg;
+                c.fill();
+                c.fillStyle = th.badgeText;
+                c.textAlign = 'center';
+                c.fillText(titleTxt, bx + tw / 2, by + 15);
+
+                // circular stamp
+                c.save();
+                c.strokeStyle = th.corner;
+                c.lineWidth = 1.5;
+                c.beginPath(); c.arc(STAMP_CX, STAMP_CY, STAMP_R, 0, Math.PI * 2); c.stroke();
+                c.beginPath(); c.arc(STAMP_CX, STAMP_CY, STAMP_R - 10, 0, Math.PI * 2); c.stroke();
+                drawCircularText(c, "HH GOA 2026 \u2022 ISSUED \u2022 HH GOA 2026 \u2022 ISSUED \u2022 ", STAMP_CX, STAMP_CY, STAMP_R - 18, th.corner, "700 10px 'Space Mono', monospace");
+                c.font = "700 15px 'Space Mono', monospace";
+                c.fillStyle = th.corner;
+                c.textAlign = 'center';
+                c.textBaseline = 'middle';
+                c.fillText("'26", STAMP_CX, STAMP_CY + 1);
+                c.restore();
+
+                // footer
+                c.save();
+                c.setLineDash([2, 10]);
+                c.strokeStyle = th.border;
+                c.lineWidth = 2;
+                c.beginPath(); c.moveTo(PAD, DASH_Y); c.lineTo(CARD - PAD, DASH_Y); c.stroke();
+                c.restore();
+
+                c.font = "10.5px 'Space Mono', monospace";
+                c.fillStyle = th.dim;
+                c.textAlign = 'left';
+                c.fillText("ISSUED 2026 \u00B7 GOA, IN", PAD, FOOTER_BASELINE);
+                c.textAlign = 'center';
+                c.fillText("FRAME//" + th.slug, CARD / 2, FOOTER_BASELINE);
+                c.textAlign = 'right';
+                c.fillStyle = th.accent;
+                c.fillText("FRAME//GOA \u2014 IDENTITY PASS", CARD - PAD, FOOTER_BASELINE);
+            }
+
+            // =========================================================
+            // PFP FRAME renderer
+            // =========================================================
+            function drawPfp(c, th) {
+                drawPhotoInto(c, PFP_PHOTO, th);
+
+                c.save();
+                c.strokeStyle = th.accent;
+                c.lineWidth = 9;
+                c.beginPath(); c.arc(PFP_CX, PFP_CY, PFP_RING1_R, 0, Math.PI * 2); c.stroke();
+                c.strokeStyle = th.corner;
+                c.lineWidth = 2;
+                c.beginPath(); c.arc(PFP_CX, PFP_CY, PFP_RING2_R, 0, Math.PI * 2); c.stroke();
+                c.restore();
+
+                drawArcTextAuto(c, "HACKER HOUSE GOA 2026", PFP_CX, PFP_CY, PFP_ARC_R, th.text,
+                    "700 24px 'Space Mono', monospace", -Math.PI / 2);
+                drawArcTextAuto(c, "#FRAMEINGOA \u2022 HH GOA 2026", PFP_CX, PFP_CY, PFP_ARC_R, th.accent,
+                    "700 22px 'Space Mono', monospace", Math.PI / 2);
+
+                // top corner chips
+                var chipFont = "700 15px 'Space Mono', monospace";
+                drawChip(c, "HH \u00B7 GOA \u00B7 2026", PAD + 8, 44, "rgba(0,0,0,0.4)", th.accent, chipFont);
+                c.font = chipFont;
+                var swText = "2:47PM STUDIO";
+                var sww = c.measureText(swText).width + 28;
+                drawChip(c, swText, CARD - PAD - 8 - sww, 44, "rgba(0,0,0,0.4)", th.text, chipFont);
+
+                // bottom badge: builder title
+                var titleTxt = (state.builderTitle || "BUILDER").toUpperCase();
+                c.font = "700 16px 'Space Mono', monospace";
+                var tw = c.measureText(titleTxt).width + 34;
+                var bx = CARD / 2 - tw / 2, by = CARD - PAD - 62;
+                roundRectPath(c, bx, by, tw, 32, 16);
+                c.fillStyle = th.badgeBg;
+                c.fill();
+                c.fillStyle = th.badgeText;
+                c.textAlign = 'center';
+                c.textBaseline = 'middle';
+                c.fillText(titleTxt, bx + tw / 2, by + 17);
+
+                c.font = "11px 'Space Mono', monospace";
+                c.fillStyle = th.dim;
+                c.fillText(state.idCode, CARD / 2, CARD - PAD - 16);
+            }
+
+            // =========================================================
+            // Main draw
+            // =========================================================
+            function draw(c, wPx, hPx) {
+                var scale = wPx / CARD;
+                var th = THEMES[state.themeIndex];
+
+                c.save();
+                c.scale(scale, scale);
+                c.clearRect(0, 0, CARD, CARD);
+
+                c.fillStyle = th.bg;
+                c.fillRect(0, 0, CARD, CARD);
+
+                c.save();
+                c.strokeStyle = th.grid;
+                c.lineWidth = 1;
+                for (var gx = 0; gx <= CARD; gx += 36) { c.beginPath(); c.moveTo(gx, 0); c.lineTo(gx, CARD); c.stroke(); }
+                for (var gy = 0; gy <= CARD; gy += 36) { c.beginPath(); c.moveTo(0, gy); c.lineTo(CARD, gy); c.stroke(); }
+                c.restore();
+
+                c.strokeStyle = th.border;
+                c.lineWidth = 1.5;
+                c.strokeRect(1, 1, CARD - 2, CARD - 2);
+                drawCorner(c, 20, 20, 26, th.corner, 'tl');
+                drawCorner(c, CARD - 20, CARD - 20, 26, th.corner, 'br');
+
+                if (state.mode === 'pfp') { drawPfp(c, th); } else { drawCard(c, th); }
+
+                c.restore();
+            }
+
+            function requestRedraw() {
+                window.requestAnimationFrame(function () { draw(ctx, canvas.width, canvas.height); });
+            }
+
+            // =========================================================
+            // Theme picker
+            // =========================================================
+            var themeGrid = document.getElementById('themeGrid');
+            function renderThemeGrid() {
+                themeGrid.innerHTML = "";
+                THEMES.forEach(function (t, i) {
+                    var card = document.createElement('button');
+                    card.type = 'button';
+                    card.className = 'theme-card' + (i === state.themeIndex ? ' active' : '');
+                    card.innerHTML =
+                        '<div class="row1">' +
+                        '<div class="swatches">' + t.swatches.map(function (sw) { return '<span style="background:' + sw + '"></span>'; }).join('') + '</div>' +
+                        '<span class="state">' + (i === state.themeIndex ? 'ACTIVE' : 'SELECT') + '</span>' +
+                        '</div>' +
+                        '<div class="theme-name">' + t.name.toUpperCase() + '</div>' +
+                        '<div class="theme-desc">' + t.desc + '</div>';
+                    card.addEventListener('click', function () {
+                        state.themeIndex = i;
+                        renderThemeGrid();
+                        requestRedraw();
+                    });
+                    themeGrid.appendChild(card);
+                });
+            }
+            renderThemeGrid();
+
+            // =========================================================
+            // Format tabs
+            // =========================================================
+            var tabCard = document.getElementById('tabCard');
+            var tabPfp = document.getElementById('tabPfp');
+            function setMode(m) {
+                if (state.mode === m) return;
+                state.mode = m;
+                state.offsetX = 0; state.offsetY = 0; state.zoom = 1.15;
+                zoomRange.value = state.zoom;
+                tabCard.classList.toggle('active', m === 'card');
+                tabPfp.classList.toggle('active', m === 'pfp');
+                requestRedraw();
+            }
+            tabCard.addEventListener('click', function () { setMode('card'); });
+            tabPfp.addEventListener('click', function () { setMode('pfp'); });
+
+            // =========================================================
+            // Upload status helper
+            // =========================================================
+            var uploadStatusEl = document.getElementById('uploadStatus');
+            function setUploadStatus(msg, isErr) {
+                uploadStatusEl.textContent = msg || "";
+                uploadStatusEl.classList.toggle('err', !!isErr);
+            }
+
+            // =========================================================
+            // File loading (JPG/PNG + HEIC/HEIF via on-demand converter)
+            // =========================================================
+            var fileInput = document.getElementById('fileInput');
+            var dropzone = document.getElementById('dropzone');
+            var photoActions = document.getElementById('photoActions');
+            var replaceBtn = document.getElementById('replaceBtn');
+            var clearBtn = document.getElementById('clearBtn');
+            var zoomRange = document.getElementById('zoomRange');
+            var downloadBtn = document.getElementById('downloadBtn');
+            var shareBtn = document.getElementById('shareBtn');
+
+            function clampOffsets() {
+                if (!state.img) return;
+                var rect = getPhotoRect();
+                var img = state.img;
+                var baseScale = Math.max(rect.w / img.width, rect.h / img.height);
+                var s = baseScale * state.zoom;
+                var dw = img.width * s, dh = img.height * s;
+                var maxOffX = Math.max(0, (dw - rect.w) / 2);
+                var maxOffY = Math.max(0, (dh - rect.h) / 2);
+                state.offsetX = Math.max(-maxOffX, Math.min(maxOffX, state.offsetX));
+                state.offsetY = Math.max(-maxOffY, Math.min(maxOffY, state.offsetY));
+            }
+
+            function ensureHeic2Any() {
+                if (window.heic2any) return Promise.resolve();
+                return new Promise(function (resolve, reject) {
+                    var s = document.createElement('script');
+                    s.src = 'https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js';
+                    s.onload = function () { resolve(); };
+                    s.onerror = function () { reject(new Error('failed to load HEIC converter')); };
+                    document.head.appendChild(s);
+                });
+            }
+
+            function readImageBlob(blob) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var img = new Image();
+                    img.onload = function () { onImageReady(img); };
+                    img.onerror = function () { setUploadStatus('Could not read that image — try a different file.', true); };
+                    img.src = e.target.result;
+                };
+                reader.onerror = function () { setUploadStatus('Could not read that file.', true); };
+                reader.readAsDataURL(blob);
+            }
+
+            function onImageReady(img) {
+                state.img = img;
+                state.zoom = 1.15; state.offsetX = 0; state.offsetY = 0;
+                zoomRange.value = state.zoom;
+                zoomRange.disabled = false;
+                downloadBtn.disabled = false;
+                shareBtn.disabled = false;
+                dropzone.style.display = 'none';
+                photoActions.classList.add('show');
+                setUploadStatus('');
+                requestRedraw();
+            }
+
+            function loadFile(file) {
+                if (!file) return;
+                var isHeic = /image\/hei[cf]/i.test(file.type) || /\.(heic|heif)$/i.test(file.name || '');
+                if (isHeic) {
+                    setUploadStatus('Converting HEIC photo\u2026');
+                    ensureHeic2Any().then(function () {
+                        return window.heic2any({ blob: file, toType: 'image/jpeg', quality: 0.9 });
+                    }).then(function (result) {
+                        var blob = Array.isArray(result) ? result[0] : result;
+                        setUploadStatus('');
+                        readImageBlob(blob);
+                    }).catch(function () {
+                        setUploadStatus('Could not convert this HEIC photo. Try exporting it as JPG, or use a screenshot.', true);
+                    });
+                    return;
+                }
+                if (file.type.indexOf('image/') !== 0) {
+                    setUploadStatus('Please choose an image file.', true);
+                    return;
+                }
+                readImageBlob(file);
+            }
+
+            function clearPhoto() {
+                state.img = null;
+                state.offsetX = 0; state.offsetY = 0;
+                zoomRange.disabled = true;
+                downloadBtn.disabled = true;
+                shareBtn.disabled = true;
+                dropzone.style.display = 'block';
+                photoActions.classList.remove('show');
+                fileInput.value = '';
+                setUploadStatus('');
+                requestRedraw();
+            }
+
+            dropzone.addEventListener('click', function () { fileInput.click(); });
+            replaceBtn.addEventListener('click', function () { fileInput.click(); });
+            clearBtn.addEventListener('click', clearPhoto);
+            fileInput.addEventListener('change', function (e) {
+                if (e.target.files && e.target.files[0]) loadFile(e.target.files[0]);
+            });
+
+            ['dragenter', 'dragover'].forEach(function (evt) {
+                dropzone.addEventListener(evt, function (e) { e.preventDefault(); e.stopPropagation(); dropzone.classList.add('drag'); });
+            });
+            ['dragleave', 'drop'].forEach(function (evt) {
+                dropzone.addEventListener(evt, function (e) { e.preventDefault(); e.stopPropagation(); dropzone.classList.remove('drag'); });
+            });
+            dropzone.addEventListener('drop', function (e) {
+                var dt = e.dataTransfer;
+                if (dt && dt.files && dt.files[0]) loadFile(dt.files[0]);
+            });
+
+            // =========================================================
+            // Zoom, drag-to-pan, and pinch-to-zoom (touch)
+            // =========================================================
+            zoomRange.addEventListener('input', function () {
+                state.zoom = parseFloat(zoomRange.value);
+                clampOffsets();
+                requestRedraw();
+            });
+
+            function toCardDelta(dxPx, dyPx) {
+                var rect = canvas.getBoundingClientRect();
+                var s = CARD / rect.width;
+                return { dx: dxPx * s, dy: dyPx * s };
+            }
+            function pointerDistance(a, b) {
+                var dx = a.x - b.x, dy = a.y - b.y;
+                return Math.sqrt(dx * dx + dy * dy);
+            }
+
+            var dragging = false, lastX = 0, lastY = 0;
+            var activePointers = {};
+            var pinchStartDist = null, pinchStartZoom = 1;
+
+            canvas.addEventListener('pointerdown', function (e) {
+                if (!state.img) return;
+                activePointers[e.pointerId] = { x: e.clientX, y: e.clientY };
+                canvas.setPointerCapture(e.pointerId);
+                var ids = Object.keys(activePointers);
+                if (ids.length === 1) {
+                    dragging = true;
+                    canvas.classList.add('dragging');
+                    lastX = e.clientX; lastY = e.clientY;
+                } else if (ids.length === 2) {
+                    dragging = false;
+                    var pts = ids.map(function (id) { return activePointers[id]; });
+                    pinchStartDist = pointerDistance(pts[0], pts[1]);
+                    pinchStartZoom = state.zoom;
+                }
+            });
+
+            canvas.addEventListener('pointermove', function (e) {
+                if (!(e.pointerId in activePointers)) return;
+                activePointers[e.pointerId] = { x: e.clientX, y: e.clientY };
+                var ids = Object.keys(activePointers);
+
+                if (ids.length === 2 && state.img) {
+                    var pts = ids.map(function (id) { return activePointers[id]; });
+                    var dist = pointerDistance(pts[0], pts[1]);
+                    if (pinchStartDist) {
+                        var factor = dist / pinchStartDist;
+                        state.zoom = Math.min(3, Math.max(1, pinchStartZoom * factor));
+                        zoomRange.value = state.zoom;
+                        clampOffsets();
+                        requestRedraw();
+                    }
+                    return;
+                }
+
+                if (!dragging) return;
+                var dx = e.clientX - lastX, dy = e.clientY - lastY;
+                lastX = e.clientX; lastY = e.clientY;
+                var d = toCardDelta(dx, dy);
+                state.offsetX += d.dx;
+                state.offsetY += d.dy;
+                clampOffsets();
+                requestRedraw();
+            });
+
+            function endPointer(e) {
+                delete activePointers[e.pointerId];
+                var ids = Object.keys(activePointers);
+                if (ids.length < 2) pinchStartDist = null;
+                if (ids.length === 0) {
+                    dragging = false;
+                    canvas.classList.remove('dragging');
+                } else if (ids.length === 1 && state.img) {
+                    dragging = true;
+                    var remaining = activePointers[ids[0]];
+                    lastX = remaining.x; lastY = remaining.y;
+                }
+            }
+            canvas.addEventListener('pointerup', endPointer);
+            canvas.addEventListener('pointercancel', endPointer);
+
+            canvas.addEventListener('wheel', function (e) {
+                if (!state.img) return;
+                e.preventDefault();
+                var delta = e.deltaY > 0 ? -0.04 : 0.04;
+                state.zoom = Math.min(3, Math.max(1, state.zoom + delta));
+                zoomRange.value = state.zoom;
+                clampOffsets();
+                requestRedraw();
+            }, { passive: false });
+
+            // =========================================================
+            // Text fields
+            // =========================================================
+            var nameInput = document.getElementById('nameInput');
+            var handleInput = document.getElementById('handleInput');
+            var orgInput = document.getElementById('orgInput');
+            var cityInput = document.getElementById('cityInput');
+            var roleInput = document.getElementById('roleInput');
+            var titleInput = document.getElementById('titleInput');
+            var rerollBtn = document.getElementById('rerollBtn');
+
+            titleInput.value = state.builderTitle;
+
+            nameInput.addEventListener('input', function () { state.name = nameInput.value; requestRedraw(); });
+            handleInput.addEventListener('input', function () { state.handle = handleInput.value; requestRedraw(); });
+            orgInput.addEventListener('input', function () { state.org = orgInput.value; requestRedraw(); });
+            cityInput.addEventListener('input', function () { state.city = cityInput.value; requestRedraw(); });
+            roleInput.addEventListener('input', function () { state.role = roleInput.value; requestRedraw(); });
+            titleInput.addEventListener('input', function () { state.builderTitle = titleInput.value; requestRedraw(); });
+            rerollBtn.addEventListener('click', function () {
+                state.rerollCount += 1;
+                state.builderTitle = generateBuilderTitle();
+                titleInput.value = state.builderTitle;
+                requestRedraw();
+            });
+
+            // =========================================================
+            // Export / Download / Share
+            // =========================================================
+            function exportBlob() {
+                return new Promise(function (resolve, reject) {
+                    var exportScale = 2;
+                    var off = document.createElement('canvas');
+                    off.width = CARD * exportScale;
+                    off.height = CARD * exportScale;
+                    var offCtx = off.getContext('2d');
+                    draw(offCtx, off.width, off.height);
+                    off.toBlob(function (blob) {
+                        if (blob) resolve(blob); else reject(new Error('export failed'));
+                    }, 'image/png');
+                });
+            }
+
+            function filenameFor() {
+                var safeName = (state.name || 'hhgoa-builder').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+                var modeTag = state.mode === 'pfp' ? 'pfp' : 'id-card';
+                return 'hackerhouse-goa-2026-' + modeTag + '-' + (safeName || 'builder') + '.png';
+            }
+
+            function triggerDownload(blob) {
+                var url = URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                a.href = url;
+                a.download = filenameFor();
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+            }
+
+            downloadBtn.addEventListener('click', function () {
+                if (!state.img) return;
+                exportBlob().then(triggerDownload).catch(function () {
+                    setUploadStatus('Could not export the image — please try again.', true);
+                });
+            });
+
+            function shareCaption() {
+                var lead = state.name ? state.name + " reporting in" : "Reporting in";
+                var title = state.builderTitle ? (" as a " + state.builderTitle) : "";
+                return lead + title + ". Applying to Hacker House Goa 2026 \uD83C\uDFDD\uFE0F\u26A1 #FrameInGoa @247pmstudio";
+            }
+
+            var shareStatusEl = document.getElementById('shareStatus');
+            var shareStatusTimer = null;
+            function setShareStatus(msg) {
+                if (shareStatusTimer) clearTimeout(shareStatusTimer);
+                shareStatusEl.textContent = msg || "";
+                if (msg) { shareStatusTimer = setTimeout(function () { shareStatusEl.textContent = ""; }, 6000); }
+            }
+
+            shareBtn.addEventListener('click', function () {
+                if (!state.img) return;
+                setShareStatus('Preparing image\u2026');
+                exportBlob().then(function (blob) {
+                    var caption = shareCaption();
+                    var file;
+                    try { file = new File([blob], filenameFor(), { type: 'image/png' }); }
+                    catch (e) { file = null; }
+
+                    if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+                        navigator.share({ files: [file], text: caption }).then(function () {
+                            setShareStatus('Shared \u2014 review your post before it goes out.');
+                        }).catch(function (err) {
+                            if (err && err.name === 'AbortError') { setShareStatus(''); return; }
+                            triggerDownload(blob);
+                            window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(caption), '_blank', 'noopener,noreferrer');
+                            setShareStatus('Downloaded the PNG and opened X \u2014 attach the image to the post.');
+                        });
+                        return;
+                    }
+                    triggerDownload(blob);
+                    window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(caption), '_blank', 'noopener,noreferrer');
+                    setShareStatus('Downloaded the PNG and opened X \u2014 attach the image to the post.');
+                }).catch(function () {
+                    setShareStatus('Could not prepare the share \u2014 try downloading instead.');
+                });
+            });
+
+            document.getElementById('copyBtn').addEventListener('click', function (e) {
+                var btn = e.currentTarget;
+                var original = btn.textContent;
+                function done(ok) {
+                    btn.textContent = ok ? '\u2713 Copied' : 'Copy failed';
+                    setTimeout(function () { btn.textContent = original; }, 1600);
+                }
+                var text = shareCaption();
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(false); });
+                } else {
+                    try {
+                        var ta = document.createElement('textarea');
+                        ta.value = text;
+                        ta.style.position = 'fixed'; ta.style.opacity = '0';
+                        document.body.appendChild(ta);
+                        ta.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(ta);
+                        done(true);
+                    } catch (err) { done(false); }
+                }
+            });
+
+            // =========================================================
+            // Fonts + responsive canvas resolution
+            // =========================================================
+            if (document.fonts && document.fonts.ready) { document.fonts.ready.then(requestRedraw); }
+            requestRedraw();
+
+            function fitCanvasResolution() {
+                var displayWidth = canvas.getBoundingClientRect().width || 500;
+                var dpr = Math.min(window.devicePixelRatio || 1, 2);
+                var target = Math.round(displayWidth * dpr);
+                if (canvas.width !== target) {
+                    canvas.width = target;
+                    canvas.height = target;
+                    requestRedraw();
+                }
+            }
+            window.addEventListener('resize', fitCanvasResolution);
+            window.addEventListener('load', fitCanvasResolution);
+            setTimeout(fitCanvasResolution, 50);
+
+        })();
+    </script>
+</body>
+
+</html>
